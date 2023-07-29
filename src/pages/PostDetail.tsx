@@ -72,7 +72,7 @@ function PostDetail({navigation, route}: PostDetailScreenProps) {
   const [commentValue, setCommentValue] = useState('');
   const [needReset, setNeedReset] = useState(false);
   const [showProfile, setShowProfile] = useState(false);
-  const [toID, setToID] = useState(-1);
+  // const [toID, setToID] = useState(-1);
   const [writeRc, setWriteRc] = useState('T');
   const [rid, setRid] = useState(0);
   const textInputRef = useRef<TextInput>(null);
@@ -121,7 +121,9 @@ function PostDetail({navigation, route}: PostDetailScreenProps) {
   }, []);
 
   useEffect(() => {
-    getBoardAndRefresh();
+    navigation.addListener('focus', () => {
+      getBoardAndRefresh();
+    })
   }, []);
 
   const userID = useSelector((state: RootState) => state.user.id);
@@ -222,7 +224,7 @@ function PostDetail({navigation, route}: PostDetailScreenProps) {
                 <Pressable
                   onPress={() => {
                     setShowProfile(true);
-                    setToID(postDATA.user_id);
+                    // setToID(postDATA.user_id);
                   }}>
                   <Icon
                     name="md-person-circle-outline"
@@ -234,7 +236,7 @@ function PostDetail({navigation, route}: PostDetailScreenProps) {
                 <Pressable
                   onPress={() => {
                     setShowProfile(true);
-                    setToID(postDATA.user_id);
+                    // setToID(postDATA.user_id);
                   }}>
                   <Image
                     style={styles.profile}
@@ -333,7 +335,7 @@ function PostDetail({navigation, route}: PostDetailScreenProps) {
           style={styles.modalBG}
           onPress={() => {
             setShowProfile(false);
-            setToID(-1);
+            // setToID(-1);
           }}>
           <View style={styles.modal}>
             {postDATA.profile_img === undefined ||
@@ -341,7 +343,7 @@ function PostDetail({navigation, route}: PostDetailScreenProps) {
               <Pressable
                 onPress={() => {
                   setShowProfile(true);
-                  setToID(postDATA.user_id);
+                  // setToID(postDATA.user_id);
                 }}>
                 <Icon name="md-person-circle-outline" color="gray" size={130} />
               </Pressable>
@@ -349,7 +351,7 @@ function PostDetail({navigation, route}: PostDetailScreenProps) {
               <Pressable
                 onPress={() => {
                   setShowProfile(true);
-                  setToID(postDATA.user_id);
+                  // setToID(postDATA.user_id);
                 }}>
                 <Image
                   style={{

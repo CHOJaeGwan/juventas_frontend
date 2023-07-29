@@ -22,25 +22,26 @@ const QuestList = ({navigation}: QuestScreenProps) => {
   const userID = useSelector((state: RootState) => state.user.id);
 
   useEffect(() => {
-    const getCategory = async () => {
-      const Category = await AsyncStorage.getItem('category');
-      if (Category) {
-        setCategoryNmae(Category);
-        if (Category === '건강') {
-          setCategory(0);
-        } else if (Category === '여가') {
-          setCategory(1);
-        } else if (Category === '학습') {
-          setCategory(2);
-        } else if (Category === '관계') {
-          setCategory(3);
-        } else {
-          setCategory(4);
+    navigation.addListener('focus', () => {
+      const getCategory = async () => {
+        const Category = await AsyncStorage.getItem('category');
+        if (Category) {
+          setCategoryNmae(Category);
+          if (Category === '건강') {
+            setCategory(0);
+          } else if (Category === '여가') {
+            setCategory(1);
+          } else if (Category === '학습') {
+            setCategory(2);
+          } else if (Category === '관계') {
+            setCategory(3);
+          } else {
+            setCategory(4);
+          }
         }
-      }
-    };
-
-    getCategory();
+      };
+      getCategory();
+    })
   }, []);
 
   const saveAfter = useCallback((text: string) => {
@@ -48,15 +49,17 @@ const QuestList = ({navigation}: QuestScreenProps) => {
   }, []);
 
   useEffect(() => {
-    const getQuest = async () => {
-      try {
-        const response = await axios.get(
-          `${Config.API_URL}/quest/wholequest/${category}`,
-        );
-        setQuest(response.data.quest);
-      } catch (error) {}
-    };
-    getQuest();
+    navigation.addListener('focus', () => {
+      const getQuest = async () => {
+        try {
+          const response = await axios.get(
+            `${Config.API_URL}/quest/wholequest/${category}`,
+          );
+          setQuest(response.data.quest);
+        } catch (error) {}
+      };
+      getQuest();
+    })
   }, [category]);
 
   const selectQuest = useCallback(async (num: number) => {

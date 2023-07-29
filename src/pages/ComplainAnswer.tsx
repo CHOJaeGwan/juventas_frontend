@@ -21,25 +21,29 @@ const ComplainAnswer = ({navigation}: ComplainScreenProps) => {
   const [incr, setIncr] = useState(0);
 
   useEffect(() => {
-    const getComplain = async () => {
-      if (incr !== 0) {
-        try {
-          const response = await axios.get(
-            `${Config.API_URL}/settings/inquiry/${incr}`,
-          );
-          setComplain(response.data);
-        } catch (error) {}
-      }
-    };
-    getComplain();
+    navigation.addListener('focus', () => {
+      const getComplain = async () => {
+        if (incr !== 0) {
+          try {
+            const response = await axios.get(
+              `${Config.API_URL}/settings/inquiry/${incr}`,
+            );
+            setComplain(response.data);
+          } catch (error) {}
+        }
+      };
+      getComplain();
+    })
   }, [incr]);
 
   useEffect(() => {
-    const getIncr = async () => {
-      const response = await AsyncStorage.getItem('complain');
-      setIncr(parseInt(response));
-    };
-    getIncr();
+    navigation.addListener('focus', () => {
+      const getIncr = async () => {
+        const response = await AsyncStorage.getItem('complain');
+        setIncr(parseInt(response));
+      };
+      getIncr();
+    })
   }, [setIncr]);
 
   return (

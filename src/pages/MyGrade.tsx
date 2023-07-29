@@ -24,20 +24,23 @@ const MyGrade = ({navigation}: MyGradeScreenProps) => {
   };
   const userID = useSelector((state: RootState) => state.user.id);
   const screenWidth = Dimensions.get('window').width;
+
   useEffect(() => {
-    const getGrade = async () => {
-      try {
-        const response = await axios.get(
-          `${Config.API_URL}/mypage/mylevel/${userID}`,
-        );
-        setCurrentGrade(response.data.current_level);
-        setNextGrade(response.data.next_level);
-        setPercentage(response.data.percentage);
-        setLeftNum(response.data.questleft);
-        getPercent(response.data.percentage);
-      } catch (error) {}
-    };
-    getGrade();
+    navigation.addListener('focus', () => {
+      const getGrade = async () => {
+        try {
+          const response = await axios.get(
+            `${Config.API_URL}/mypage/mylevel/${userID}`,
+          );
+          setCurrentGrade(response.data.current_level);
+          setNextGrade(response.data.next_level);
+          setPercentage(response.data.percentage);
+          setLeftNum(response.data.questleft);
+          getPercent(response.data.percentage);
+        } catch (error) {}
+      };
+      getGrade();
+    })
   }, []);
 
   return (

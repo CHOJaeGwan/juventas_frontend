@@ -64,79 +64,84 @@ function Board({navigation}: BoardScreenProps) {
   }, []);
 
   useEffect(() => {
-    const filterPost = async () => {
-      try {
-        if (categorySelected) {
-          if (filterSelected) {
-            let temp;
-            if (filterSelected === 1) {
-              temp = 'F';
+    navigation.addListener('focus', () => {
+      const filterPost = async () => {
+        try {
+          if (categorySelected) {
+            if (filterSelected) {
+              let temp;
+              if (filterSelected === 1) {
+                temp = 'F';
+              } else {
+                temp = 'T';
+              }
+              const response = await axios.get(
+                `${Config.API_URL}/board/post?c_id=${
+                  categorySelected - 1
+                }&is_qna='${temp}'&id='${userID}'`,
+              );
+              setDATA(response.data.post);
+              setBestPostDATA([]);
             } else {
-              temp = 'T';
+              const response = await axios.get(
+                `${Config.API_URL}/board/post?c_id=${
+                  categorySelected - 1
+                }&id='${userID}'`,
+              );
+              setDATA(response.data.post);
+              setBestPostDATA([]);
             }
-            const response = await axios.get(
-              `${Config.API_URL}/board/post?c_id=${
-                categorySelected - 1
-              }&is_qna='${temp}'&id='${userID}'`,
-            );
-            setDATA(response.data.post);
-            setBestPostDATA([]);
           } else {
-            const response = await axios.get(
-              `${Config.API_URL}/board/post?c_id=${
-                categorySelected - 1
-              }&id='${userID}'`,
-            );
-            setDATA(response.data.post);
-            setBestPostDATA([]);
+            if (filterSelected) {
+              let temp;
+              if (filterSelected === 1) {
+                temp = 'F';
+              } else {
+                temp = 'T';
+              }
+              const response = await axios.get(
+                `${Config.API_URL}/board/post?is_qna='${temp}'&id='${userID}'`,
+              );
+              setDATA(response.data.post);
+              setBestPostDATA([]);
+            } else {
+              const response = await axios.get(
+                `${Config.API_URL}/board/post?id='${userID}'`,
+              );
+              setDATA(response.data.post);
+              setBestPostDATA(response.data.bestPost);
+            }
           }
-        } else {
-          if (filterSelected) {
-            let temp;
-            if (filterSelected === 1) {
-              temp = 'F';
-            } else {
-              temp = 'T';
-            }
-            const response = await axios.get(
-              `${Config.API_URL}/board/post?is_qna='${temp}'&id='${userID}'`,
-            );
-            setDATA(response.data.post);
-            setBestPostDATA([]);
-          } else {
-            const response = await axios.get(
-              `${Config.API_URL}/board/post?id='${userID}'`,
-            );
-            setDATA(response.data.post);
-            setBestPostDATA(response.data.bestPost);
+        } catch (error) {
+          const errorResponse = (error as AxiosError<{message: string}>).response;
+          if (errorResponse) {
+            return Alert.alert('알림', errorResponse.data?.message);
           }
         }
-      } catch (error) {
-        const errorResponse = (error as AxiosError<{message: string}>).response;
-        if (errorResponse) {
-          return Alert.alert('알림', errorResponse.data?.message);
-        }
-      }
-    };
-    filterPost();
+      };
+      filterPost();
+    })
   }, [categorySelected, filterSelected, refreshing, userID]);
 
+
   useEffect(() => {
-    const getBoardAndRefresh = async () => {
-      try {
-        const response = await axios.get(
-          `${Config.API_URL}/board/post?id='${userID}'`,
-        );
-        setDATA(response.data.post);
-        setBestPostDATA(response.data.bestPost);
-      } catch (error) {
-        const errorResponse = (error as AxiosError<{message: string}>).response;
-        if (errorResponse) {
-          return Alert.alert('알림', errorResponse.data?.message);
+    navigation.addListener('focus', () => {
+      const getBoardAndRefresh = async () => {
+        try {
+          const response = await axios.get(
+            `${Config.API_URL}/board/post?id='${userID}'`,
+          );
+          setDATA(response.data.post);
+          setBestPostDATA(response.data.bestPost);
+        } catch (error) {
+          const errorResponse = (error as AxiosError<{message: string}>).response;
+          if (errorResponse) {
+            return Alert.alert('알림', errorResponse.data?.message);
+          }
         }
-      }
-    };
-    getBoardAndRefresh();
+      };
+      getBoardAndRefresh();
+    })
   }, []);
 
   return (

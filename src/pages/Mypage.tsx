@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useCallback, useDebugValue, useEffect, useState} from 'react';
 import {
   View,
   Pressable,
@@ -76,21 +76,22 @@ const Mypage = () => {
   const userID = useSelector((state: RootState) => state.user.id);
 
   useEffect(() => {
-    const getName = async () => {
-      if (isModifying === false) {
-        try {
-          const response = await axios.get(
-            `${Config.API_URL}/mypage/main/${userID}`,
-          );
-          setProfile(response.data);
-          setuserName(response.data.name);
-          setIntro(response.data.intro);
-          getPercent(response.data.percentage);
-        } catch (error) {}
-      }
-    };
-    getName();
-  }, []);
+    navigation.addListener('focus', () => {
+      const getName = async () => {
+        if (isModifying === false) {
+          try {
+            const response = await axios.get(
+              `${Config.API_URL}/mypage/main/${userID}`,
+            );
+            setProfile(response.data);
+            setuserName(response.data.name);
+            setIntro(response.data.intro);
+            getPercent(response.data.percentage);
+          } catch (error) {}
+        }
+      };
+      getName();
+    })}, []);
 
   const changeProfile = async () => {
     if (profileImg != null) {

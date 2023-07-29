@@ -86,11 +86,15 @@ const CommentItem = ({
   };
 
   useEffect(() => {
-    setRc();
+    navigation.addListener('focus', () => {
+      setRc();
+    })
   }, [writeRc]);
 
   useEffect(() => {
-    setReData();
+    navigation.addListener('focus', () => {
+      setReData();
+    })
   }, [currentReData]);
 
   function ReplyComment({Item}) {

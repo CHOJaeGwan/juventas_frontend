@@ -79,8 +79,10 @@ function Home({navigation, route}: HomeScreenProps) {
   const screenWidth = Dimensions.get('window').width;
 
   useEffect(() => {
-    getQuestSelectedOrNot();
-    getBoardData();
+    navigation.addListener('focus', () => {
+      getQuestSelectedOrNot();
+      getBoardData();
+    })
   }, []);
 
   const getQuestSelectedOrNot = async () => {
@@ -123,6 +125,7 @@ function Home({navigation, route}: HomeScreenProps) {
         setAllQuestData(response.data.recommend);
       }
       setLevel(response.data.level);
+      getImage(response.data.level);
       setSeqCount(response.data.seq_count);
       setCompletedNUm(response.data.quest_completed);
       setPoint(response.data.point);
@@ -133,12 +136,13 @@ function Home({navigation, route}: HomeScreenProps) {
       }
     }
   };
+  
 
   useEffect(() => {
     getQuestData();
-    getImage(level);
   }, [questSelected, route.params?.didSelect]);
 
+    
   const getBoardData = async () => {
     try {
       const response = await axios.get(
@@ -157,37 +161,43 @@ function Home({navigation, route}: HomeScreenProps) {
     (lev: string) => {
       if (lev.includes('씨앗') === true) {
         setLevelTxt('Level_1');
+        setImage(imageArray.Level_1);
       } else if (lev.includes('새싹') === true) {
         setLevelTxt('Level_2');
+        setImage(imageArray.Level_2);
       } else if (lev.includes('묘목') === true) {
         setLevelTxt('Level_3');
+        setImage(imageArray.Level_3);
       } else if (lev.includes('나무') === true) {
         setLevelTxt('Level_4');
+        setImage(imageArray.Level_4);
       } else if (lev.includes('꽃') === true) {
         setLevelTxt('Level_5');
+        setImage(imageArray.Level_5);
       } else {
         setLevelTxt('Level_6');
+        setImage(imageArray.Level_6);
       }
-      getSrc();
+      // getSrc(lev);
     },
     [level, levelTxt, levelImage],
   );
 
-  const getSrc = useCallback(() => {
-    if (levelTxt === 'Level_1') {
-      setImage(imageArray.Level_1);
-    } else if (levelTxt === 'Level_2') {
-      setImage(imageArray.Level_2);
-    } else if (levelTxt === 'Level_3') {
-      setImage(imageArray.Level_3);
-    } else if (levelTxt === 'Level_4') {
-      setImage(imageArray.Level_4);
-    } else if (levelTxt === 'Level_5') {
-      setImage(imageArray.Level_5);
-    } else {
-      setImage(imageArray.Level_6);
-    }
-  }, [levelTxt, levelImage]);
+  // const getSrc = useCallback((lev: string) => {
+  //   if (lev.includes('씨앗') === true) {
+  //     setImage(imageArray.Level_1);
+  //   } else if (lev.includes('새싹') === true) {
+  //     setImage(imageArray.Level_2);
+  //   } else if (levelTxt === 'Level_3') {
+  //     setImage(imageArray.Level_3);
+  //   } else if (levelTxt === 'Level_4') {
+  //     setImage(imageArray.Level_4);
+  //   } else if (levelTxt === 'Level_5') {
+  //     setImage(imageArray.Level_5);
+  //   } else {
+  //     setImage(imageArray.Level_6);
+  //   }
+  // }, [levelTxt, levelImage]);
 
   const selectQuest = async (num: number) => {
     try {

@@ -14,26 +14,31 @@ const Notice = ({navigation}: NoticeScreenProps) => {
   const [incr, setIncr] = useState(0);
 
   useEffect(() => {
-    const getNotice = async () => {
-      if (incr !== 0) {
-        try {
-          const response = await axios.get(
-            `${Config.API_URL}/settings/announcement/${incr}`,
-          );
-          setNotice(response.data);
-        } catch (error) {}
-      }
-    };
-    getNotice();
+    navigation.addListener('focus', () => {
+      const getNotice = async () => {
+        if (incr !== 0) {
+          try {
+            const response = await axios.get(
+              `${Config.API_URL}/settings/announcement/${incr}`,
+            );
+            setNotice(response.data);
+          } catch (error) {}
+        }
+      };
+      getNotice();
+    })
   }, [incr]);
 
   useEffect(() => {
-    const getIncr = async () => {
-      const inc = await AsyncStorage.getItem('notice');
-      setIncr(parseInt(inc));
-    };
-    getIncr();
+    navigation.addListener('focus', () => {
+      const getIncr = async () => {
+        const inc = await AsyncStorage.getItem('notice');
+        setIncr(parseInt(inc));
+      };
+      getIncr();
+    })
   }, []);
+
   return (
     <SafeAreaView style={styles.entire}>
       <ScrollView style={styles.Board}>

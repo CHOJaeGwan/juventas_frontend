@@ -28,16 +28,18 @@ function NoticeList({navigation}: NoticeScreenProps) {
   }, []);
 
   useEffect(() => {
-    const getNotice = async () => {
-      try {
-        const response = await axios.get(
-          `${Config.API_URL}/settings/announcement`,
-        );
-        setFixedNotice(response.data.fixed[0]);
-        setNotice(response.data.announce);
-      } catch (error) {}
-    };
-    getNotice();
+    navigation.addListener('focus', () => {
+      const getNotice = async () => {
+        try {
+          const response = await axios.get(
+            `${Config.API_URL}/settings/announcement`,
+          );
+          setFixedNotice(response.data.fixed[0]);
+          setNotice(response.data.announce);
+        } catch (error) {}
+      };
+      getNotice();
+    })
   }, []);
 
   function header() {

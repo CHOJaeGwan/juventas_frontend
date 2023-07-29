@@ -50,74 +50,78 @@ const MyKnowhow = ({navigation}: MyKnowhowScreenProps) => {
   }, []);
 
   useEffect(() => {
-    const filterPost = async () => {
-      try {
-        if (categorySelected) {
-          if (filterSelected) {
-            let temp;
-            if (filterSelected === 1) {
-              temp = 'F';
+    navigation.addListener('focus', () => {
+      const filterPost = async () => {
+        try {
+          if (categorySelected) {
+            if (filterSelected) {
+              let temp;
+              if (filterSelected === 1) {
+                temp = 'F';
+              } else {
+                temp = 'T';
+              }
+              const response = await axios.get(
+                `${Config.API_URL}/mypage/mywriting?c_id=${
+                  categorySelected - 1
+                }&is_qna='${temp}'&id='${userID}'`,
+              );
+              setDATA(response.data.post);
             } else {
-              temp = 'T';
+              const response = await axios.get(
+                `${Config.API_URL}/mypage/mywriting?c_id=${
+                  categorySelected - 1
+                }&id='${userID}'`,
+              );
+              setDATA(response.data.post);
             }
-            const response = await axios.get(
-              `${Config.API_URL}/mypage/mywriting?c_id=${
-                categorySelected - 1
-              }&is_qna='${temp}'&id='${userID}'`,
-            );
-            setDATA(response.data.post);
           } else {
-            const response = await axios.get(
-              `${Config.API_URL}/mypage/mywriting?c_id=${
-                categorySelected - 1
-              }&id='${userID}'`,
-            );
-            setDATA(response.data.post);
+            if (filterSelected) {
+              let temp;
+              if (filterSelected === 1) {
+                temp = 'F';
+              } else {
+                temp = 'T';
+              }
+              const response = await axios.get(
+                `${Config.API_URL}/mypage/mywriting?is_qna='${temp}'&id='${userID}'`,
+              );
+              setDATA(response.data.post);
+            } else {
+              const response = await axios.get(
+                `${Config.API_URL}/mypage/mywriting?id='${userID}'`,
+              );
+              setDATA(response.data.post);
+            }
           }
-        } else {
-          if (filterSelected) {
-            let temp;
-            if (filterSelected === 1) {
-              temp = 'F';
-            } else {
-              temp = 'T';
-            }
-            const response = await axios.get(
-              `${Config.API_URL}/mypage/mywriting?is_qna='${temp}'&id='${userID}'`,
-            );
-            setDATA(response.data.post);
-          } else {
-            const response = await axios.get(
-              `${Config.API_URL}/mypage/mywriting?id='${userID}'`,
-            );
-            setDATA(response.data.post);
+        } catch (error) {
+          const errorResponse = (error as AxiosError<{message: string}>).response;
+          if (errorResponse) {
+            return Alert.alert('알림', errorResponse.data?.message);
           }
         }
-      } catch (error) {
-        const errorResponse = (error as AxiosError<{message: string}>).response;
-        if (errorResponse) {
-          return Alert.alert('알림', errorResponse.data?.message);
-        }
-      }
-    };
-    filterPost();
+      };
+      filterPost();
+    })
   }, [categorySelected, filterSelected, refreshing, userID]);
 
   useEffect(() => {
-    const getBoardAndRefresh = async () => {
-      try {
-        const response = await axios.get(
-          `${Config.API_URL}/mypage/mywriting?id='${userID}'`,
-        );
-        setDATA(response.data.post);
-      } catch (error) {
-        const errorResponse = (error as AxiosError<{message: string}>).response;
-        if (errorResponse) {
-          return Alert.alert('알림', errorResponse.data?.message);
+    navigation.addListener('focus', () => {
+      const getBoardAndRefresh = async () => {
+        try {
+          const response = await axios.get(
+            `${Config.API_URL}/mypage/mywriting?id='${userID}'`,
+          );
+          setDATA(response.data.post);
+        } catch (error) {
+          const errorResponse = (error as AxiosError<{message: string}>).response;
+          if (errorResponse) {
+            return Alert.alert('알림', errorResponse.data?.message);
+          }
         }
-      }
-    };
-    getBoardAndRefresh();
+      };
+      getBoardAndRefresh();
+    })
   }, []);
 
   return (

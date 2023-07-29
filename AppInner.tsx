@@ -94,6 +94,7 @@ function AppInner() {
     };
     getTokenAndRefresh();
   }, [dispatch]);
+  
 
   useEffect(() => {
     if (socket && isLoggedIn) {

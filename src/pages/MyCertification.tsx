@@ -38,16 +38,19 @@ const MyCertification = ({navigation}: CertificationScreenProps) => {
   }, []);
 
   const userID = useSelector((state: RootState) => state.user.id);
+
   useEffect(() => {
-    const getCertification = async () => {
-      try {
-        const response = await axios.get(
-          `${Config.API_URL}/mypage/myrecord/${userID}`,
-        );
-        setMyCertification(response.data.record);
-      } catch (error) {}
-    };
-    getCertification();
+    navigation.addListener('focus', () => {
+      const getCertification = async () => {
+        try {
+          const response = await axios.get(
+            `${Config.API_URL}/mypage/myrecord/${userID}`,
+          );
+          setMyCertification(response.data.record);
+        } catch (error) {}
+      };
+      getCertification();
+    })
   }, []);
 
   const formatDate = (dateString: string) => {

@@ -57,17 +57,19 @@ function MessageDetail({navigation, route}: MessageDetailScreenProps) {
   });
 
   useEffect(() => {
-    console.log(route);
-    if (socket && roomID !== null) {
-      socket.emit('join room', userID, roomID);
-      socket.on('messages', results => setChats(results));
-      socket.on('new message', (userId, message, timestamp) => {
-        setChats([
-          {user_id: userId, message: message, timestamp: timestamp},
-          ...chats,
-        ]);
-      });
-    }
+    navigation.addListener('focus', () => {
+      console.log(route);
+      if (socket && roomID !== null) {
+        socket.emit('join room', userID, roomID);
+        socket.on('messages', results => setChats(results));
+        socket.on('new message', (userId, message, timestamp) => {
+          setChats([
+            {user_id: userId, message: message, timestamp: timestamp},
+            ...chats,
+          ]);
+        });
+      }
+    })
   }, [roomID]);
 
   const onChangeMessage = (text: string) => {

@@ -40,31 +40,33 @@ const QuestList = ({navigation}: CertificationScreenProps) => {
     const day = String(date.getDate()).padStart(2, '0');
     return `${year}.${month}.${day}`;
   };
-
   useEffect(() => {
-    const checkIncr = async () => {
-      if (Incr === -1) {
-        await getIncr();
-      }
-    };
-
-    checkIncr();
+    navigation.addListener('focus', () => {
+      const checkIncr = async () => {
+        if (Incr === -1) {
+          await getIncr();
+        }
+      };
+      checkIncr();
+    })
   }, [Incr]);
 
   const userID = useSelector((state: RootState) => state.user.id);
   useEffect(() => {
-    const getCertification = async () => {
-      try {
-        if (Incr !== -1) {
-          const response = await axios.get(
-            `${Config.API_URL}/mypage/myrecord/${userID}`,
-          );
-          setMyCertification(response.data.record[Incr]);
-        }
-      } catch (error) {}
-    };
-
-    getCertification();
+    navigation.addListener('focus', () => {
+      const getCertification = async () => {
+        try {
+          if (Incr !== -1) {
+            const response = await axios.get(
+              `${Config.API_URL}/mypage/myrecord/${userID}`,
+            );
+            setMyCertification(response.data.record[Incr]);
+          }
+        } catch (error) {}
+      };
+    
+      getCertification();
+    })
   }, [Incr]);
 
   if (Incr === -1) {
