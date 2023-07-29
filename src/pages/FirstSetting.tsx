@@ -21,12 +21,13 @@ const IconWelcome = require('../../assets/image/welcome.png');
 const IconLoading = require('../../assets/image/loading.png');
 
 const FirstSetting = ({
-  setState,
+  setState, name
 }: {
   setState: React.Dispatch<React.SetStateAction<boolean>>;
+  name : string;
 }) => {
   const userID = useSelector((state: RootState) => state.user.id);
-
+  const username = name;
   const [firstScreen, setFirstScreen] = useState(0);
   const [Name, setName] = useState('');
   const [NameCheck, setNameCheck] = useState('');
@@ -74,24 +75,18 @@ const FirstSetting = ({
     '5시간~         ',
   ];
 
-  const onChangeName = useCallback(
-    (text: string) => {
+  const onChangeName = (text: string) => {
       setName(text.trim());
       setNameCheck('');
-    },
-    [NameCheck],
-  );
+    };
 
-  const onChangeSex = useCallback(
-    (text: string) => {
+  const onChangeSex = (text: string) => {
       if (text === Sex) {
         setSex('');
       } else {
         setSex(text);
       }
-    },
-    [Sex],
-  );
+    };
 
   const onChooseHousemate = (num: number) => {
     if (num === 1) {
@@ -257,8 +252,7 @@ const FirstSetting = ({
     }
     // setJob(!worker && !self && !partTime && !housemaker && !student && !nojob && !official && !etcjob);
   };
-  const onChoosePrefer = useCallback(
-    (num: number) => {
+  const onChoosePrefer = (num: number) => {
       if (num === 1) {
         if (!health) {
           setSelected(selected + 1);
@@ -339,19 +333,7 @@ const FirstSetting = ({
         }
         setRelation(!relation);
       }
-    },
-    [
-      selected,
-      health,
-      leisure,
-      study,
-      relation,
-      healthOrder,
-      leisureOrder,
-      studyOrder,
-      relationOrder,
-    ],
-  );
+    };
 
   const onNameCheck = useCallback(
     async (text: string) => {
@@ -530,7 +512,7 @@ const FirstSetting = ({
         <View style={styles.header}>
           <Image source={IconWelcome} style={styles.image} />
           <Text style={styles.headerText}>
-            환영합니다 <Text style={styles.headerTextBold}>{userID}</Text> 님!
+            환영합니다 <Text style={styles.headerTextBold}>{username}</Text> 님!
           </Text>
         </View>
       )}
@@ -538,10 +520,10 @@ const FirstSetting = ({
         <KeyboardAwareScrollView style={styles.setting}>
           <View style={styles.title}>
             <Text style={styles.titleTxt}>
-              다음 중 {userID}님에게 해당되는 사항은 무엇인가요?
+              다음 중 {username}님에게 해당되는 사항은 무엇인가요?
             </Text>
             <Text style={styles.titleTxtBig}>
-              {userID}님에 대해 알려주세요!
+              {username}님에 대해 알려주세요!
             </Text>
           </View>
           <View style={styles.name}>

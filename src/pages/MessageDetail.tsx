@@ -70,21 +70,24 @@ function MessageDetail({navigation, route}: MessageDetailScreenProps) {
     }
   }, [roomID]);
 
-  const onChangeMessage = useCallback((text: string) => {
+  const onChangeMessage = (text: string) => {
     setMyMessage(text);
-  }, []);
+    // console.log(myMessage);
+  };
 
   const onSend = () => {
-    socket?.emit('send message', userID, roomID, myMessage);
-    setChats(prev => [
-      ...prev,
-      {
-        user_id: userID,
-        message: myMessage,
-        timestamp: new Date().toTimeString(),
-      },
-    ]);
-    setMyMessage('');
+    if (myMessage !== '') {
+      socket?.emit('send message', userID, roomID, myMessage);
+      setChats(prev => [
+        ...prev,
+        {
+          user_id: userID,
+          message: myMessage,
+          timestamp: new Date().toTimeString(),
+        },
+      ]);
+      setMyMessage('');
+    }
   };
 
   return (
@@ -122,6 +125,7 @@ function MessageDetail({navigation, route}: MessageDetailScreenProps) {
           style={styles.myMessageContent}
           onChangeText={onChangeMessage}
           onSubmitEditing={onSend}
+          value={myMessage}
         />
         <Pressable onPress={onSend} style={styles.sendBtn}>
           <Text style={styles.sendBtnTxt}>전송</Text>

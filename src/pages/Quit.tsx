@@ -57,13 +57,15 @@ const Quit = ({navigation}: SettingScreenProps) => {
   };
 
   const unlinkUser = async (): Promise<void> => {
-    if (user.loginType === 'kakao') {
-      await unlink();
-      await axios.delete(`${Config.API_URL}/user/unlinkSocial?id=${user.id}`);
-    } else if (user.loginType === 'naver') {
-      await NaverLogin.deleteToken();
-      await axios.delete(`${Config.API_URL}/user/unlinkSocial?id=${user.id}`);
-    } else {
+    // console.log(user.id)
+    // if (user.loginType === 'kakao') {
+    //   await unlink();
+    //   await axios.delete(`${Config.API_URL}/user/unlinkSocial?id=${user.id}`);
+    // } else if (user.loginType === 'naver') {
+    //   await NaverLogin.deleteToken();
+    //   await axios.delete(`${Config.API_URL}/user/unlinkSocial?id=${user.id}`);
+    // } else 
+    {
       const response = await axios.delete(
         `${Config.API_URL}/user/unlink?id=${user.id}`,
         {

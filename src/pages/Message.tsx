@@ -33,6 +33,7 @@ function Message() {
         `${Config.API_URL}/message/roomlist?id=${userID}`,
       );
       setRoomlist(response.data.roomlist);
+      console.log(response.data.roomlist)
     };
     getRoomlist();
   }, [refreshing, userID]);

@@ -15,10 +15,13 @@ import {useNavigation} from '@react-navigation/native';
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
 import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
 import Icon from 'react-native-vector-icons/Ionicons';
+import axios, {AxiosError} from 'axios';
+import Config from 'react-native-config';
 
 type ItemProps = {
   incr: number;
   c_content: string;
+  user_id: number,
   user_name: string;
   like: number;
   myrec: number;
@@ -50,6 +53,7 @@ const CommentItem = ({
   recommentData: CommentItemProps[];
 }) => {
   const [showProfile, setShowProfile] = useState(false);
+  const [toID, setToID] = useState(-1);
 
   const userID = useSelector((state: RootState) => state.user.id);
   const navigation = useNavigation<MessageStackNavigationProp>();
@@ -97,6 +101,7 @@ const CommentItem = ({
             <Pressable
               onPress={() => {
                 setShowProfile(true);
+                setToID(Item.user_id);
               }}>
               <Icon name="md-person-circle-outline" color="gray" size={35} />
             </Pressable>
@@ -104,6 +109,7 @@ const CommentItem = ({
             <Pressable
               onPress={() => {
                 setShowProfile(true);
+                setToID(Item.user_id);
               }}>
               <Image
                 style={styles.reprofile}
@@ -129,6 +135,9 @@ const CommentItem = ({
             <Pressable
               onPress={() => {
                 setShowProfile(true);
+                setToID(items.user_id);
+                // console.log(items.user_name)
+                // console.log(items.user_id)
               }}>
               <Icon name="md-person-circle-outline" color="gray" size={40} />
             </Pressable>
@@ -136,6 +145,7 @@ const CommentItem = ({
             <Pressable
               onPress={() => {
                 setShowProfile(true);
+                setToID(items.user_id);
               }}>
               <Image
                 style={styles.profile}
@@ -194,20 +204,15 @@ const CommentItem = ({
           style={styles.modalBG}
           onPress={() => {
             setShowProfile(false);
+            setToID(-1);
           }}>
           <View style={styles.modal}>
             {items.profile_img === undefined || items.profile_img === null ? (
-              <Pressable
-                onPress={() => {
-                  setShowProfile(true);
-                }}>
+              <Pressable>
                 <Icon name="md-person-circle-outline" color="gray" size={130} />
               </Pressable>
             ) : (
-              <Pressable
-                onPress={() => {
-                  setShowProfile(true);
-                }}>
+              <Pressable>
                 <Image
                   style={{
                     width: 130,
@@ -221,12 +226,20 @@ const CommentItem = ({
             <Text style={styles.modalID}>{items.user_name}</Text>
             <Pressable
               style={styles.modalBtn}
-              onPress={() =>
+              onPress={async () => {
+                const response = await axios.post(
+                  `${Config.API_URL}/message/makeroom`,
+                  {
+                    id: userID,
+                    you: toID,
+                  },
+                );
+                console.log(response?.data.roomlist[0].incr);
                 navigation.navigate('MessageDetail', {
-                  me: userID,
-                  you: items.user_name,
-                })
-              }>
+                  incr: response?.data.roomlist[0].incr,
+                });
+              }}
+              >
               {/* navigate할때 전달해주는 정보 수정 필요! roomID 찾아보고 있으면 string으로 전달해줘야함 (없으면 만들면서 전달) */}
               <Text style={styles.modalBtnTxt}>쪽지 보내기</Text>
             </Pressable>
