@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">juventas</string>
+    <string name="app_name">"하루도전"</string>
     <string name="kakao_app_key">057e8d26a0fea2622287d4eeb64cdbfa</string>
     <string name="default_notification_channel_id">test_channel</string>
 </resources>

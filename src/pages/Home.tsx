@@ -317,7 +317,7 @@ function Home({navigation, route}: HomeScreenProps) {
               <Text style={styles.boardProfileUsername} numberOfLines={1}>
                 {Item?.user_name}
               </Text>
-              <Text style={styles.boardProfileTitle} numberOfLines={2}>
+              <Text style={styles.boardProfileTitle} numberOfLines={1}>
                 {Item?.title}
               </Text>
             </View>
@@ -479,9 +479,10 @@ function Home({navigation, route}: HomeScreenProps) {
             horizontal
             pagingEnabled
             data={boardData}
-            contentContainerStyle={{
-              width: `${(screenWidth - 71) * boardData.length}%`,
-            }}
+            contentContainerStyle={
+              (boardData.length <= 1) ? {width: '100%'} : 
+              (boardData.length == 2) ? {width: '200%'} : {width: '300%'}
+            }
             showsHorizontalScrollIndicator={false}
             keyExtractor={item => String(item.incr)}
             renderItem={({item}) => <ShowBoard Item={item} />}
