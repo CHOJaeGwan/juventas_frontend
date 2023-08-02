@@ -16,7 +16,7 @@ export type BoardStackParamList = {
   NewPost: undefined;
   PostDetail: {postID: number};
   SearchPost: undefined;
-  Message: undefined;
+  // Message: undefined;
   MessageDetail: {incr: number};
 };
 

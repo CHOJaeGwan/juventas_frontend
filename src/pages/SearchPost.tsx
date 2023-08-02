@@ -39,7 +39,9 @@ function SearchPost({navigation}: SearchPostScreenProps) {
   );
 
   useEffect(() => {
-    onSubmit();
+    navigation.addListener('focus', () => {
+      onSubmit();
+    })
   }, [keyword]);
 
   const onChangeSearch = useCallback((text: string) => {

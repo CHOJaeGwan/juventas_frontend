@@ -122,8 +122,10 @@ const NewPost = ({navigation}: BoardScreenProps) => {
       navigation.goBack();
     }
   };
-
-  useEffect(() => {}, [categorySelected, filterSelected]);
+  useEffect(() => {
+    navigation.addListener('focus', () => {
+    })
+  }, [categorySelected, filterSelected]);
 
   return (
     <KeyboardAwareScrollView>

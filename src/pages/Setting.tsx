@@ -67,35 +67,41 @@ function Setting({navigation}: SettingScreenProps) {
   const [Notice, setNotice] = useState({content: '', title: ''});
 
   useEffect(() => {
-    const getNotice = async () => {
-      try {
-        const response = await axios.get(
-          `${Config.API_URL}/settings/announcement`,
-        );
-        setNotice(response.data.fixed[0]);
-      } catch (error) {}
-    };
-    getNotice();
+    navigation.addListener('focus', () => {
+      const getNotice = async () => {
+        try {
+          const response = await axios.get(
+            `${Config.API_URL}/settings/announcement`,
+          );
+          setNotice(response.data.fixed[0]);
+        } catch (error) {}
+      };
+      getNotice();
+    })
   }, []);
 
   useEffect(() => {
-    const getNotice = async () => {
-      try {
-        const response = await axios.get(
-          `${Config.API_URL}/settings/announcement`,
-        );
-        setNotice(response.data.fixed[0]);
-      } catch (error) {}
-    };
-    getNotice();
+    navigation.addListener('focus', () => {
+      const getNotice = async () => {
+        try {
+          const response = await axios.get(
+            `${Config.API_URL}/settings/announcement`,
+          );
+          setNotice(response.data.fixed[0]);
+        } catch (error) {}
+      };
+      getNotice();
+    })
   }, []);
 
   useEffect(() => {
-    const getComplain = async () => {
-      const response = await axios.get(`${Config.API_URL}/settings/inquiry`);
-      setFaq(response.data.FAQ);
-    };
-    getComplain();
+    navigation.addListener('focus', () => {
+      const getComplain = async () => {
+        const response = await axios.get(`${Config.API_URL}/settings/inquiry`);
+        setFaq(response.data.FAQ);
+      };
+      getComplain();
+    })
   }, []);
 
   return (

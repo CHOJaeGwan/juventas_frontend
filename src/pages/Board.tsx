@@ -121,22 +121,25 @@ function Board({navigation}: BoardScreenProps) {
     filterPost();
   }, [categorySelected, filterSelected, refreshing, userID]);
 
+
   useEffect(() => {
-    const getBoardAndRefresh = async () => {
-      try {
-        const response = await axios.get(
-          `${Config.API_URL}/board/post?id='${userID}'`,
-        );
-        setDATA(response.data.post);
-        setBestPostDATA(response.data.bestPost);
-      } catch (error) {
-        const errorResponse = (error as AxiosError<{message: string}>).response;
-        if (errorResponse) {
-          return Alert.alert('알림', errorResponse.data?.message);
+    navigation.addListener('focus', () => {
+      const getBoardAndRefresh = async () => {
+        try {
+          const response = await axios.get(
+            `${Config.API_URL}/board/post?id='${userID}'`,
+          );
+          setDATA(response.data.post);
+          setBestPostDATA(response.data.bestPost);
+        } catch (error) {
+          const errorResponse = (error as AxiosError<{message: string}>).response;
+          if (errorResponse) {
+            return Alert.alert('알림', errorResponse.data?.message);
+          }
         }
-      }
-    };
-    getBoardAndRefresh();
+      };
+      getBoardAndRefresh();
+    })
   }, []);
 
   return (

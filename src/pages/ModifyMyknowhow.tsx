@@ -40,52 +40,57 @@ const ModifyMyknowhow = ({navigation}: modifyMyknowhowScreenProps) => {
   const categoryDATA = ['건강', '여가', '학습', '관계'];
   const filterDATA = ['노하우', '질문'];
   const userID = useSelector((state: RootState) => state.user.id);
+
   useEffect(() => {
-    const getPost = async () => {
-      const id = await AsyncStorage.getItem('postId');
-      if (id) {
-        const parsedId = parseInt(id, 10);
-        setPostId(parsedId);
-      }
-    };
-    getPost();
-    const getCid = async () => {
-      const id = await AsyncStorage.getItem('cId');
-      if (id) {
-        const parsedId = parseInt(id, 10);
-        setcId(parsedId);
-        setCategorySelected(parsedId);
-      }
-    };
-    getCid();
+    navigation.addListener('focus', () => {
+      const getPost = async () => {
+        const id = await AsyncStorage.getItem('postId');
+        if (id) {
+          const parsedId = parseInt(id, 10);
+          setPostId(parsedId);
+        }
+      };
+      getPost();
+      const getCid = async () => {
+        const id = await AsyncStorage.getItem('cId');
+        if (id) {
+          const parsedId = parseInt(id, 10);
+          setcId(parsedId);
+          setCategorySelected(parsedId);
+        }
+      };
+      getCid();
+    })
   }, [postId, cId]);
 
   useEffect(() => {
-    const getBoardAndRefresh = async () => {
-      try {
-        if (postId !== 0) {
-          const response = await axios.get(
-            `${Config.API_URL}/board/post/${postId}?id='${userID}'`,
-          );
-          setQuestId(0);
-          setTitle(response.data.post[0].title);
-          setContent(response.data.post[0].content);
-          if (response.data.post[0].is_qna === 'T') {
-            setIsq(1);
-            setFilterSelected(1);
-          } else {
-            setIsq(0);
-            setFilterSelected(0);
+    navigation.addListener('focus', () => {
+      const getBoardAndRefresh = async () => {
+        try {
+          if (postId !== 0) {
+            const response = await axios.get(
+              `${Config.API_URL}/board/post/${postId}?id='${userID}'`,
+            );
+            setQuestId(0);
+            setTitle(response.data.post[0].title);
+            setContent(response.data.post[0].content);
+            if (response.data.post[0].is_qna === 'T') {
+              setIsq(1);
+              setFilterSelected(1);
+            } else {
+              setIsq(0);
+              setFilterSelected(0);
+            }
+          }
+        } catch (error) {
+          const errorResponse = (error as AxiosError<{message: string}>).response;
+          if (errorResponse) {
+            return Alert.alert('알림', errorResponse.data?.message);
           }
         }
-      } catch (error) {
-        const errorResponse = (error as AxiosError<{message: string}>).response;
-        if (errorResponse) {
-          return Alert.alert('알림', errorResponse.data?.message);
-        }
-      }
-    };
-    getBoardAndRefresh();
+      };
+      getBoardAndRefresh();
+    })
   }, [postId, userID, isQ]);
 
   const onChangeTitle = useCallback((text: string) => {
@@ -121,7 +126,10 @@ const ModifyMyknowhow = ({navigation}: modifyMyknowhowScreenProps) => {
     headerStyle: {backgroundColor: '#DAE2D8'},
   });
 
-  useEffect(() => {}, [categorySelected, filterSelected]);
+  useEffect(() => {
+    navigation.addListener('focus', () => {
+    })
+  }, [categorySelected, filterSelected]);
 
   return (
     <KeyboardAwareScrollView>

@@ -42,7 +42,9 @@ function SearchMyPost({navigation}: SearchMyPostScreenProps) {
   );
 
   useEffect(() => {
-    onSubmit();
+    navigation.addListener('focus', () => {
+      onSubmit();
+    })
   }, [keyword]);
 
   const onChangeSearch = useCallback((text: string) => {

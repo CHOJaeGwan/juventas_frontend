@@ -21,12 +21,14 @@ const IconWelcome = require('../../assets/image/welcome.png');
 const IconLoading = require('../../assets/image/loading.png');
 
 const FirstSetting = ({
-  setState,
+  setState, name
 }: {
   setState: React.Dispatch<React.SetStateAction<boolean>>;
+  name : string;
 }) => {
   const userID = useSelector((state: RootState) => state.user.id);
-
+  const username = name;
+  console.log(name)
   const [firstScreen, setFirstScreen] = useState(0);
   const [Name, setName] = useState('');
   const [NameCheck, setNameCheck] = useState('');
@@ -74,24 +76,18 @@ const FirstSetting = ({
     '5시간~         ',
   ];
 
-  const onChangeName = useCallback(
-    (text: string) => {
+  const onChangeName = (text: string) => {
       setName(text.trim());
       setNameCheck('');
-    },
-    [NameCheck],
-  );
+    };
 
-  const onChangeSex = useCallback(
-    (text: string) => {
+  const onChangeSex = (text: string) => {
       if (text === Sex) {
         setSex('');
       } else {
         setSex(text);
       }
-    },
-    [Sex],
-  );
+    };
 
   const onChooseHousemate = (num: number) => {
     if (num === 1) {
@@ -257,8 +253,7 @@ const FirstSetting = ({
     }
     // setJob(!worker && !self && !partTime && !housemaker && !student && !nojob && !official && !etcjob);
   };
-  const onChoosePrefer = useCallback(
-    (num: number) => {
+  const onChoosePrefer = (num: number) => {
       if (num === 1) {
         if (!health) {
           setSelected(selected + 1);
@@ -339,19 +334,7 @@ const FirstSetting = ({
         }
         setRelation(!relation);
       }
-    },
-    [
-      selected,
-      health,
-      leisure,
-      study,
-      relation,
-      healthOrder,
-      leisureOrder,
-      studyOrder,
-      relationOrder,
-    ],
-  );
+    };
 
   const onNameCheck = useCallback(
     async (text: string) => {
@@ -530,7 +513,7 @@ const FirstSetting = ({
         <View style={styles.header}>
           <Image source={IconWelcome} style={styles.image} />
           <Text style={styles.headerText}>
-            환영합니다 <Text style={styles.headerTextBold}>{userID}</Text> 님!
+            환영합니다 <Text style={styles.headerTextBold}>{username}</Text> 님!
           </Text>
         </View>
       )}
@@ -538,10 +521,10 @@ const FirstSetting = ({
         <KeyboardAwareScrollView style={styles.setting}>
           <View style={styles.title}>
             <Text style={styles.titleTxt}>
-              다음 중 {userID}님에게 해당되는 사항은 무엇인가요?
+              다음 중 {username}님에게 해당되는 사항은 무엇인가요?
             </Text>
             <Text style={styles.titleTxtBig}>
-              {userID}님에 대해 알려주세요!
+              {username}님에 대해 알려주세요!
             </Text>
           </View>
           <View style={styles.name}>
@@ -580,7 +563,7 @@ const FirstSetting = ({
           <View style={styles.select}>
             <View style={styles.selectTitle}>
               <Text style={styles.selectTxt}>
-                {userID}님의 나이를 알려주세요
+                {username}님의 나이를 알려주세요
               </Text>
             </View>
             <View style={styles.selectView}>
@@ -607,7 +590,7 @@ const FirstSetting = ({
           <View style={styles.select}>
             <View style={styles.selectTitle}>
               <Text style={styles.selectTxt}>
-                {userID}님의 성별을 선택해주세요
+                {username}님의 성별을 선택해주세요
               </Text>
             </View>
             <View style={styles.selectView}>
@@ -648,7 +631,7 @@ const FirstSetting = ({
           <View style={styles.select}>
             <View style={styles.selectTitle}>
               <Text style={styles.selectTxt}>
-                {userID}님은 누구와 함께 사시나요?
+                {username}님은 누구와 함께 사시나요?
               </Text>
               <Text style={styles.selectTxtSmall}>(중복 선택 가능)</Text>
             </View>
@@ -835,7 +818,7 @@ const FirstSetting = ({
           <View style={styles.select}>
             <View style={styles.selectTitle}>
               <Text style={styles.selectTxt}>
-                {userID}님의 직업은 무엇인가요?
+                {username}님의 직업은 무엇인가요?
               </Text>
               <Text style={styles.selectTxtSmall}>(중복 선택 가능)</Text>
             </View>
@@ -915,7 +898,7 @@ const FirstSetting = ({
           <View style={styles.select}>
             <View style={styles.selectTitle}>
               <Text style={styles.selectTxt}>
-                {userID}님이 해보고 싶은 도전을 선택해주세요
+                {username}님이 해보고 싶은 도전을 선택해주세요
               </Text>
               <Text style={styles.selectTxtSmall}>(선호순으로 3개 선택)</Text>
             </View>
@@ -1005,14 +988,14 @@ const FirstSetting = ({
         <View style={styles.header}>
           <Image source={IconLoading} style={styles.imageSmall} />
           <Text style={styles.headerTextSmall}>
-            {userID}님의 취향에 맞게 설정하고 있어요
+            {username}님의 취향에 맞게 설정하고 있어요
           </Text>
         </View>
       )}
       {!firstScreen && (
         <View style={styles.body}>
           <Text style={styles.bodyText}>
-            도전을 시작하기 위해 {userID}님에 대해 알려주세요
+            도전을 시작하기 위해 {username}님에 대해 알려주세요
           </Text>
           <Pressable style={styles.setUpBtn} onPress={nextScreen}>
             <Text style={styles.setUpBtnText}>기본 사항 설정하기</Text>

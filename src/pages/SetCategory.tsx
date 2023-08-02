@@ -87,29 +87,33 @@ const SetCategory = ({navigation}: MypageScreenProps) => {
   const userID = useSelector((state: RootState) => state.user.id);
 
   useEffect(() => {
-    const getCat = async () => {
-      try {
-        const response = await axios.get(
-          `${Config.API_URL}/mypage/main/${userID}`,
-        );
-        setCategorySelected_0(response.data.cat_0);
-        setCategorySelected_1(response.data.cat_1);
-        setCategorySelected_2(response.data.cat_2);
-      } catch (error) {}
-    };
-    getCat();
+    navigation.addListener('focus', () => {
+      const getCat = async () => {
+        try {
+          const response = await axios.get(
+            `${Config.API_URL}/mypage/main/${userID}`,
+          );
+          setCategorySelected_0(response.data.cat_0);
+          setCategorySelected_1(response.data.cat_1);
+          setCategorySelected_2(response.data.cat_2);
+        } catch (error) {}
+      };
+      getCat();
+    })
   }, []);
 
   useEffect(() => {
-    const getCompletedCategory = async () => {
-      try {
-        const response = await axios.get(
-          `${Config.API_URL}/mypage/category/${userID}`,
-        );
-        setNum(response.data);
-      } catch (error) {}
-    };
-    getCompletedCategory();
+    navigation.addListener('focus', () => {
+      const getCompletedCategory = async () => {
+        try {
+          const response = await axios.get(
+            `${Config.API_URL}/mypage/category/${userID}`,
+          );
+          setNum(response.data);
+        } catch (error) {}
+      };
+      getCompletedCategory();
+    })
   }, []);
 
   const changeCategory = async () => {

@@ -128,15 +128,17 @@ const TodayChk = ({navigation}: HomeScreenProps) => {
   };
 
   useEffect(() => {
-    const getQuest = async () => {
-      try {
-        const response = await axios.get(
-          `${Config.API_URL}/quest/userquest/${userID}`,
-        );
-        setMyQuest(response.data);
-      } catch (error) {}
-    };
-    getQuest();
+    navigation.addListener('focus', () => {
+      const getQuest = async () => {
+        try {
+          const response = await axios.get(
+            `${Config.API_URL}/quest/userquest/${userID}`,
+          );
+          setMyQuest(response.data);
+        } catch (error) {}
+      };
+      getQuest();
+    })
   }, []);
 
   return (

@@ -25,12 +25,14 @@ function Complain({navigation}: ComplainScreenProps) {
   }, []);
 
   useEffect(() => {
-    const getComplain = async () => {
-      const response = await axios.get(`${Config.API_URL}/settings/inquiry`);
-      setFaq(response.data.FAQ);
-      setComplain(response.data.inquiry);
-    };
-    getComplain();
+    navigation.addListener('focus', () => {
+      const getComplain = async () => {
+        const response = await axios.get(`${Config.API_URL}/settings/inquiry`);
+        setFaq(response.data.FAQ);
+        setComplain(response.data.inquiry);
+      };
+      getComplain();
+    })
   }, []);
 
   function Faq({Item}) {

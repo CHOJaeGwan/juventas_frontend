@@ -137,7 +137,9 @@ function MyPostDetail({navigation, route}: MyPostDetailScreenProps) {
   }, []);
 
   useEffect(() => {
-    getBoardAndRefresh();
+    navigation.addListener('focus', () => {
+      getBoardAndRefresh();
+    })
   }, []);
 
   const userID = useSelector((state: RootState) => state.user.id);
